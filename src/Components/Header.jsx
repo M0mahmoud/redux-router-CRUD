@@ -1,22 +1,19 @@
 import React from "react";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
-    <div className="header">
-      <h1>CRUD APP</h1>
-      <ul className="nav">
-        <li>
-          <NavLink to="/" end>
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="post/add">Add Post</NavLink>
-        </li>
-        <li className="login">login</li>
-      </ul>
-    </div>
+    <Navbar>
+      <Nav className="me-auto">
+        <NavLink to="/" end className="mx-2 btn">
+          Home
+        </NavLink>
+        <NavLink to="post/add" className="mx-2 btn">
+          Add Post
+        </NavLink>
+      </Nav>
+    </Navbar>
   );
 };
 

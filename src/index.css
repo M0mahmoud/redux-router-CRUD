@@ -1,39 +1,39 @@
-.header {
-  margin-bottom: 30px;
-  margin-top: 20px;
+* {
+  background-color: #fff;
 }
 
-.header h1 {
-  margin: 20px 0;
+.active,
+.active:focus {
+  background-color: #0d6efd !important;
+  outline: none !important;
+  border: none !important;
 }
-.header .nav {
-  background-color: black;
-  height: 50px;
-  list-style: none;
+
+.load {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  margin: 50px auto;
 }
-
-.header .nav li:first-child {
-  margin-left: 5px;
+.load div {
+  width: 15px;
+  height: 15px;
+  background-color: darkblue;
+  border-radius: 50%;
+  margin: 0 5px;
+  animation-name: up-down;
+  animation-duration: 0.8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
-
-.header .nav li {
-  margin-right: 10px;
+.load .two {
+  animation-delay: 0.3s;
 }
-
-.header .nav li a {
-  color: white;
-  font-size: 16px;
-  text-decoration: none;
+.load .three {
+  animation-delay: 0.6s;
 }
-
-.header .nav .active {
-  text-decoration: underline;
-}
-
-.login {
-  color: white;
-  font-size: 16px;
-  margin-left: auto;
+@keyframes up-down {
+  to {
+    opacity: 0.2;
+    transform: translateY(-20px);
+  }
 }

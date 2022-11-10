@@ -1,18 +1,9 @@
-import React from "react";
-import { Table, Button, ButtonGroup } from "react-bootstrap";
-const PostLists = ({ data }) => {
-  const records = data.map((el, index) => (
-    <tr>
-      <td>#{++index}</td>
-      <td>{el.title}</td>
-      <td>
-        <ButtonGroup aria-label="Basic example">
-          <Button variant="success">Edit</Button>
-          <Button variant="danger">Delete</Button>
-        </ButtonGroup>
-      </td>
-    </tr>
-  ));
+import React, { memo } from "react";
+import { Table } from "react-bootstrap";
+
+import PostListItem from "../Components/PostListItem";
+
+const PostLists = memo(({ data, deletePosts }) => {
   return (
     <Table striped bordered hover>
       <thead>
@@ -22,9 +13,11 @@ const PostLists = ({ data }) => {
           <th style={{ width: "10%" }}></th>
         </tr>
       </thead>
-      <tbody>{records}</tbody>
+      <tbody>
+        <PostListItem data={data} deletePosts={deletePosts} />
+      </tbody>
     </Table>
   );
-};
+});
 
 export default PostLists;

@@ -6,8 +6,8 @@ function Root() {
   return (
     <Container>
       <Header />
-      <Row>
-        <Col xs={{ span: 8, offset: 2 }}>
+      <Row className="mt-5 p-3">
+        <Col>
           <Outlet />
         </Col>
       </Row>

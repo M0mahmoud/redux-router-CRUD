@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Index from "./Routes/Index";
 import Root from "./Routes/Root";
 import ErrorPage from "./Routes/ErrorPage";
-import Add from "./Routes/Add";
+import AddPost from "./Routes/AddPost";
 import Edit from "./Routes/Edit";
 import Details from "./Routes/Details";
 
@@ -20,7 +20,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "post/add",
-        element: <Add />,
+        element: <AddPost />,
       },
       {
         path: "post/:id/edit",
