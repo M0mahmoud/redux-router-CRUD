@@ -40,9 +40,8 @@ export const deletePost = createAsyncThunk(
 export const insertPosts = createAsyncThunk(
   "posts/insertPosts",
   async (item, thunkApi) => {
-    const { rejectWithValue, getState } = thunkApi;
-    const { auth } = getState();
-    item.id = auth.id;
+    const { rejectWithValue } = thunkApi;
+    item.id = Number(Math.floor(Math.random() * 900));
     try {
       const response = await fetch(`http://localhost:5000/posts`, {
         method: "POST",
@@ -52,6 +51,7 @@ export const insertPosts = createAsyncThunk(
         },
       });
       const data = await response.json();
+      console.log("Insert");
       return data;
     } catch (error) {
       return rejectWithValue(error.message || error);
@@ -59,7 +59,29 @@ export const insertPosts = createAsyncThunk(
   }
 );
 
-// Edit Post
+// Update Post
+export const updatePost = createAsyncThunk(
+  "posts/update",
+  async ({ id, title, desc }, thunkApi) => {
+    const { rejectWithValue } = thunkApi;
+    try {
+      await fetch(`http://localhost:5000/posts/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          id: id,
+          title: title,
+          desc: desc,
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      });
+      return { id, title, desc };
+    } catch (error) {
+      return rejectWithValue(error.message || error);
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "posts",
@@ -104,6 +126,20 @@ const postSlice = createSlice({
       state.data.push(action.payload);
     });
     builder.addCase(insertPosts.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // Update Post
+    builder.addCase(updatePost.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updatePost.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data.push(action.payload);
+    });
+    builder.addCase(updatePost.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

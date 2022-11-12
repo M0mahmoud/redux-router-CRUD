@@ -15,14 +15,14 @@ const AddPost = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const id = Math.floor(Math.random() * 900);
+    const id = Math.floor(Math.random() * 1000);
     dispatch(insertPosts({ id, title, desc }))
       .unwrap()
       .then(() => {
         navigate("/");
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((error) => {
+        console.log(error);
       });
 
     // Clear
@@ -40,7 +40,6 @@ const AddPost = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Form.Text className="text-muted">Post Title</Form.Text>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
