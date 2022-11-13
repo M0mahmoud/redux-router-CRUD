@@ -34,7 +34,7 @@ const Edit = () => {
         <Form.Label>Your Title</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter Title"
+          placeholder="Enter Description"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -43,7 +43,8 @@ const Edit = () => {
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Description</Form.Label>
         <Form.Control
-          type="text"
+          as="textarea"
+          rows={4}
           placeholder="Enter Description"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}

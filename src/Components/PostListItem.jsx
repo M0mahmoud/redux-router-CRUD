@@ -1,8 +1,10 @@
 import { Button, ButtonGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Details from "../Routes/Details";
+import Detail from "./Detail";
 
-const PostListItem = ({ data, deletePosts , updatePost }) => {
-  const navigate= useNavigate()
+const PostListItem = ({ data, deletePosts, postDetail }) => {
+  const navigate = useNavigate();
   const deleteHandler = (item) => {
     Swal.fire({
       title: "Are you sure?",
@@ -19,15 +21,25 @@ const PostListItem = ({ data, deletePosts , updatePost }) => {
     });
   };
 
-
   const records = data.map((el, index) => (
     <tr key={index}>
       <td>{++index}</td>
       <td>{el.title}</td>
       <td>
         <ButtonGroup aria-label="Basic example">
-          <Button variant="success" onClick={()=>navigate(`post/${el.id}/edit`)}>Edit</Button>
-          <Button variant="danger" onClick={() => deleteHandler(el)}>
+          <Detail postDetail={postDetail} id={el.id} />
+          <Button
+            className="mx-1"
+            variant="success"
+            onClick={() => navigate(`post/${el.id}/edit`)}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="danger"
+            className="mx-1"
+            onClick={() => deleteHandler(el)}
+          >
             Delete
           </Button>
         </ButtonGroup>

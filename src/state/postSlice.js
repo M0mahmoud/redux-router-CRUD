@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Ellipsis } from "react-bootstrap/esm/PageItem";
 
 const initialState = {
   data: [],
@@ -13,6 +14,22 @@ export const fetchPosts = createAsyncThunk(
     try {
       const response = await fetch("http://localhost:5000/posts");
       const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || error);
+    }
+  }
+);
+
+// Fetch Post
+export const fetchPost = createAsyncThunk(
+  "posts/fetchPost",
+  async (id, thunkApi) => {
+    const { rejectWithValue } = thunkApi;
+    try {
+      const res = await fetch(`http://localhost:5000/posts/${id}`);
+      const data = res.json();
+      console.log("Feth data", data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || error);
@@ -88,7 +105,7 @@ const postSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    //fetchPosts
+    //fetch Posts
     builder.addCase(fetchPosts.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -102,7 +119,21 @@ const postSlice = createSlice({
       state.error = action.payload;
     });
 
-    // DeletePost
+    //fetch Post
+    builder.addCase(fetchPost.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchPost.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload; // Errror
+    });
+    builder.addCase(fetchPost.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // Delete Post
     builder.addCase(deletePost.pending, (state) => {
       state.loading = true;
       state.error = null;
