@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { updatePost } from "../state/postSlice";
 
 const Edit = () => {
+  console.log("Edit Runing");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const dispatch = useDispatch();

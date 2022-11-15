@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Ellipsis } from "react-bootstrap/esm/PageItem";
 
 const initialState = {
   data: [],
@@ -29,7 +28,6 @@ export const fetchPost = createAsyncThunk(
     try {
       const res = await fetch(`http://localhost:5000/posts/${id}`);
       const data = res.json();
-      console.log("Feth data", data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || error);
@@ -125,8 +123,8 @@ const postSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchPost.fulfilled, (state, action) => {
+      state.data = action.payload;
       state.loading = false;
-      state.data = action.payload; // Errror
     });
     builder.addCase(fetchPost.rejected, (state, action) => {
       state.loading = false;

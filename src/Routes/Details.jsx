@@ -5,16 +5,10 @@ import { useParams } from "react-router-dom";
 import { fetchPost } from "../state/postSlice";
 
 const Details = () => {
+  console.log("Details Runing");
   const dispatch = useDispatch();
-  const { id } = useParams();
   const { data } = useSelector((state) => state.posts);
 
-  useEffect(() => {
-    dispatch(fetchPost(id));
-  }, []);
-
-  console.log("data Detail", id);
-  console.log("data Detail", data);
   return (
     <>
       <Container>

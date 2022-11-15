@@ -21,6 +21,7 @@ const Index = () => {
 
   const postDetail = useCallback((id) => {
     navigate(`post/${id}`);
+    dispatch(fetchPost(id));
   }, []);
 
   return (
