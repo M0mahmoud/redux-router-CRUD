@@ -1,10 +1,11 @@
+import React from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Details from "../Routes/Details";
-import Detail from "./Detail";
 
-const PostListItem = ({ data, deletePosts, postDetail }) => {
+const PostListItem = ({ data, deletePosts }) => {
+  console.log("PostListItem Runing");
   const navigate = useNavigate();
+
   const deleteHandler = (item) => {
     Swal.fire({
       title: "Are you sure?",
@@ -21,24 +22,34 @@ const PostListItem = ({ data, deletePosts, postDetail }) => {
     });
   };
 
-  const records = data.map((el, index) => (
+  const fetchedData = data.map((value, index) => (
     <tr key={index}>
       <td>{++index}</td>
-      <td>{el.title}</td>
+      <td>{value.title}</td>
       <td>
         <ButtonGroup aria-label="Basic example">
-          <Detail postDetail={postDetail} id={el.id} />
+          <Button
+            className="mx-1"
+            variant="primary"
+            onClick={() => {
+              navigate(`post/${value.id}`);
+            }}
+          >
+            Details
+          </Button>
           <Button
             className="mx-1"
             variant="success"
-            onClick={() => navigate(`post/${el.id}/edit`)}
+            onClick={() => {
+              navigate(`post/${value.id}/edit`);
+            }}
           >
             Edit
           </Button>
           <Button
             variant="danger"
             className="mx-1"
-            onClick={() => deleteHandler(el)}
+            onClick={() => deleteHandler(value)}
           >
             Delete
           </Button>
@@ -46,7 +57,8 @@ const PostListItem = ({ data, deletePosts, postDetail }) => {
       </td>
     </tr>
   ));
-  return <>{records}</>;
+
+  return <>{fetchedData}</>;
 };
 
 export default PostListItem;

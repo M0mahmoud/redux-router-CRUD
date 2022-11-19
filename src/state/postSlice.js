@@ -20,21 +20,6 @@ export const fetchPosts = createAsyncThunk(
   }
 );
 
-// Fetch Post
-export const fetchPost = createAsyncThunk(
-  "posts/fetchPost",
-  async (id, thunkApi) => {
-    const { rejectWithValue } = thunkApi;
-    try {
-      const res = await fetch(`http://localhost:5000/posts/${id}`);
-      const data = res.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || error);
-    }
-  }
-);
-
 // Delete
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
@@ -97,7 +82,6 @@ export const updatePost = createAsyncThunk(
     }
   }
 );
-
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -113,20 +97,6 @@ const postSlice = createSlice({
       state.data = action.payload;
     });
     builder.addCase(fetchPosts.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
-
-    //fetch Post
-    builder.addCase(fetchPost.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(fetchPost.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(fetchPost.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Loading from "../Components/Loading";
-import { deletePost, fetchPost, fetchPosts } from "../state/postSlice";
+
+import { deletePost, fetchPosts } from "../state/postSlice";
 
 import PostLists from "./PostLists";
+import Loading from "../Components/Loading";
 
 const Index = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.posts);
+  const { data } = useSelector((state) => state.posts);
 
   useEffect(() => {
     dispatch(fetchPosts());
@@ -19,19 +18,10 @@ const Index = () => {
     dispatch(deletePost(id));
   }, []);
 
-  const postDetail = useCallback((id) => {
-    navigate(`post/${id}`);
-    dispatch(fetchPost(id));
-  }, []);
-
   return (
     <>
-      <Loading loading={loading} error={error}>
-        <PostLists
-          data={data}
-          deletePosts={deletePosts}
-          postDetail={postDetail}
-        />
+      <Loading>
+        <PostLists data={data} deletePosts={deletePosts} />
       </Loading>
     </>
   );

@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 
 import PostListItem from "../Components/PostListItem";
 
-const PostLists = memo(({ data, deletePosts, updatePost, postDetail }) => {
+const PostLists = memo(({ data, deletePosts }) => {
   return (
     <Table striped bordered hover>
       <thead>
@@ -14,15 +14,10 @@ const PostLists = memo(({ data, deletePosts, updatePost, postDetail }) => {
         </tr>
       </thead>
       <tbody>
-        <PostListItem
-          data={data}
-          deletePosts={deletePosts}
-          updatePost={updatePost}
-          postDetail={postDetail}
-        />
+        <PostListItem data={data} deletePosts={deletePosts} />
       </tbody>
     </Table>
   );
 });
 
-export default PostLists;
+export default memo(PostLists);

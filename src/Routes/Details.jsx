@@ -1,13 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Container } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { fetchPost } from "../state/postSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Details = () => {
   console.log("Details Runing");
-  const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.posts);
+  const navigate = useNavigate();
+  const params = useParams();
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/posts/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setTitle(data.title);
+        setDesc(data.desc);
+      });
+  }, []);
 
   return (
     <>
@@ -16,11 +25,21 @@ const Details = () => {
           <Card.Header>Details</Card.Header>
           <Card.Body>
             <Card.Title className="text-primary p-1 mb-3 border-bottom fs-1 ">
-              {data.title}
+              {title}
             </Card.Title>
-            <Card.Text className="fs-3 ">{data.desc}</Card.Text>
+            <Card.Text className="fs-3 ">{desc}</Card.Text>
           </Card.Body>
-          <Card.Footer className="text-muted"></Card.Footer>
+          <Card.Footer>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Go Back
+            </Button>
+          </Card.Footer>
         </Card>
       </Container>
     </>

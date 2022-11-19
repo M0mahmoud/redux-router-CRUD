@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { insertPosts } from "../state/postSlice";
-// import withGuard from "../util/withGuard";
 
 const AddPost = () => {
   console.log("AddPost Runing");
@@ -63,4 +62,3 @@ const AddPost = () => {
 };
 
 export default AddPost;
-// export default withGuard(AddPost);
