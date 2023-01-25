@@ -1,47 +1,48 @@
-import React, { useEffect, useState } from "react";
 import { Button, Card, Container } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import usePostDetails from "../hooks/usePostDetails";
+import Loading from "../Components/Loading";
+import { cleanPost } from "../store/postSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const Details = () => {
-  console.log("Details Runing");
   const navigate = useNavigate();
-  const params = useParams();
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
+  const dispatch = useDispatch();
+  const { loading, error, post } = usePostDetails();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/posts/${params.id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setTitle(data.title);
-        setDesc(data.desc);
-      });
-  }, []);
+    return () => {
+      dispatch(cleanPost());
+    };
+  }, [dispatch]);
 
   return (
     <>
-      <Container>
-        <Card className="text-center">
-          <Card.Header>Details</Card.Header>
-          <Card.Body>
-            <Card.Title className="text-primary p-1 mb-3 border-bottom fs-1 ">
-              {title}
-            </Card.Title>
-            <Card.Text className="fs-3 ">{desc}</Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              Go Back
-            </Button>
-          </Card.Footer>
-        </Card>
-      </Container>
+      <Loading error={error} loading={loading}>
+        <Container>
+          <Card className="text-center">
+            <Card.Header>Details</Card.Header>
+            <Card.Body>
+              <Card.Title className="text-primary p-1 mb-3 border-bottom fs-1 ">
+                {post?.title}
+              </Card.Title>
+              <Card.Text className="fs-3 ">{post?.desc}</Card.Text>
+            </Card.Body>
+            <Card.Footer>
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Go Back
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Container>
+      </Loading>
     </>
   );
 };

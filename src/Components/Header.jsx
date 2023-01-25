@@ -6,10 +6,10 @@ const Header = () => {
   return (
     <Navbar>
       <Nav className="me-auto">
-        <NavLink to="/" end className="mx-2 btn">
+        <NavLink to="/" end className="mx-2 btn border-primary">
           Home
         </NavLink>
-        <NavLink to="post/add" className="mx-2 btn">
+        <NavLink to="post/add" className="mx-2 btn border-primary">
           Add Post
         </NavLink>
       </Nav>

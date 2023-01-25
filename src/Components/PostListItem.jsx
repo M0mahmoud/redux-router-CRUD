@@ -3,7 +3,6 @@ import { Button, ButtonGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const PostListItem = ({ data, deletePosts }) => {
-  console.log("PostListItem Runing");
   const navigate = useNavigate();
 
   const deleteHandler = (item) => {

@@ -7,6 +7,15 @@ import AddPost from "./Routes/AddPost";
 import Edit from "./Routes/Edit";
 import Details from "./Routes/Details";
 
+const paramHandler = ({ params }) => {
+  if (isNaN(params.id)) {
+    throw new Response("Bad Request", {
+      statusText: "plz make sure to insert correct link !",
+      status: 400,
+    });
+  }
+};
+
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -25,18 +34,12 @@ const routes = createBrowserRouter([
       {
         path: "post/:id/edit",
         element: <Edit />,
+        loader: paramHandler,
       },
       {
         path: "post/:id",
         element: <Details />,
-        loader: ({ params }) => {
-          if (isNaN(params.id)) {
-            throw new Response("Bad Request", {
-              statusText: "plz make sure to insert correct link !",
-              status: 400,
-            });
-          }
-        },
+        loader: paramHandler,
       },
     ],
   },

@@ -1,32 +1,38 @@
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { updatePost } from "../state/postSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Loading from "../Components/Loading";
+import usePostDetails from "../hooks/usePostDetails";
+import { cleanPost, updatePost } from "../store/postSlice";
 
 const Edit = () => {
-  console.log("Edit Runing");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const { id } = useParams();
-  const { loading } = useSelector((state) => state.posts);
+
+  const { loading, error, post } = usePostDetails();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/posts/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setTitle(data.title);
-        setDesc(data.desc);
-      });
-  }, []);
+    if (post && !title && !desc) {
+      setTitle(post.title);
+      setDesc(post.desc);
+    }
+  }, [post]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanPost());
+    };
+  }, [dispatch]);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(updatePost({ id, title, desc }));
-    console.log({ id, title, desc });
-    navigate("/");
+    const item = { id: post.id, title, desc };
+    dispatch(updatePost(item))
+      .unwrap()
+      .then(() => navigate("/"));
   };
 
   return (
@@ -52,14 +58,11 @@ const Edit = () => {
             onChange={(e) => setDesc(e.target.value)}
           />
         </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
-          className="center"
-          disabled={loading ? true : false}
-        >
-          Submit
-        </Button>
+        <Loading error={error} loading={loading}>
+          <Button variant="primary" type="submit" className="center">
+            Submit
+          </Button>
+        </Loading>
       </Form>
     </>
   );

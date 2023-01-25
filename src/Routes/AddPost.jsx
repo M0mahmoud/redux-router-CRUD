@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Loading from "../Components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { insertPosts } from "../state/postSlice";
+import { insertPosts } from "../store/postSlice";
 
 const AddPost = () => {
-  console.log("AddPost Runing");
-
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading } = useSelector((state) => state.posts);
+  const { loading, error } = useSelector((state) => state.posts);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -54,9 +53,15 @@ const AddPost = () => {
           onChange={(e) => setDesc(e.target.value)}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" disabled={loading ? true : false}>
-        Submit
-      </Button>
+      <Loading error={error} loading={loading}>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={loading ? true : false}
+        >
+          Submit
+        </Button>
+      </Loading>
     </Form>
   );
 };

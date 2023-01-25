@@ -4,6 +4,7 @@ const initialState = {
   data: [],
   loading: false,
   error: null,
+  post: null,
 };
 
 export const fetchPosts = createAsyncThunk(
@@ -12,6 +13,21 @@ export const fetchPosts = createAsyncThunk(
     const { rejectWithValue } = thunkApi;
     try {
       const response = await fetch("http://localhost:5000/posts");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || error);
+    }
+  }
+);
+
+// Get Post
+export const getPost = createAsyncThunk(
+  "posts/fetchPost",
+  async (id, thunkApi) => {
+    const { rejectWithValue } = thunkApi;
+    try {
+      const response = await fetch(`http://localhost:5000/posts/${id}`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -51,7 +67,6 @@ export const insertPosts = createAsyncThunk(
         },
       });
       const data = await response.json();
-      console.log("Insert");
       return data;
     } catch (error) {
       return rejectWithValue(error.message || error);
@@ -62,21 +77,18 @@ export const insertPosts = createAsyncThunk(
 // Update Post
 export const updatePost = createAsyncThunk(
   "posts/update",
-  async ({ id, title, desc }, thunkApi) => {
+  async (item, thunkApi) => {
     const { rejectWithValue } = thunkApi;
     try {
-      await fetch(`http://localhost:5000/posts/${id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          id: id,
-          title: title,
-          desc: desc,
-        }),
+      const response = await fetch(`http://localhost:5000/posts/${item.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(item),
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
         },
       });
-      return { id, title, desc };
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message || error);
     }
@@ -85,7 +97,11 @@ export const updatePost = createAsyncThunk(
 const postSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    cleanPost: (state) => {
+      state.post = null;
+    },
+  },
   extraReducers: (builder) => {
     //fetch Posts
     builder.addCase(fetchPosts.pending, (state) => {
@@ -97,6 +113,20 @@ const postSlice = createSlice({
       state.data = action.payload;
     });
     builder.addCase(fetchPosts.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    //Get Post
+    builder.addCase(getPost.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getPost.fulfilled, (state, action) => {
+      state.loading = false;
+      state.post = action.payload;
+    });
+    builder.addCase(getPost.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
@@ -136,7 +166,7 @@ const postSlice = createSlice({
     });
     builder.addCase(updatePost.fulfilled, (state, action) => {
       state.loading = false;
-      state.data.push(action.payload);
+      state.post = action.payload;
     });
     builder.addCase(updatePost.rejected, (state, action) => {
       state.loading = false;
@@ -144,5 +174,5 @@ const postSlice = createSlice({
     });
   },
 });
-
+export const { cleanPost } = postSlice.actions;
 export default postSlice.reducer;
